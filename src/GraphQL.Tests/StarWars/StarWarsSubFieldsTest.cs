@@ -40,7 +40,7 @@ namespace GraphQL.Tests.StarWars
 
             var expected = @"
                 {
-                    listOfHumans: []
+                    ""listOfHumans"": []
                 }
             ";
             AssertQuerySuccess(query, expected);
@@ -69,7 +69,7 @@ namespace GraphQL.Tests.StarWars
             ";
             var expected = @"
                 {
-                    singleHuman: null
+                    ""singleHuman"": null
                 }
             ";
             AssertQuerySuccess(query, expected);
@@ -98,7 +98,7 @@ namespace GraphQL.Tests.StarWars
 
             var expected = @"
                 {
-                    listOfCharacters: []
+                    ""listOfCharacters"": []
                 }
             ";
             AssertQuerySuccess(query, expected);
@@ -127,7 +127,7 @@ namespace GraphQL.Tests.StarWars
 
             var expected = @"
                 {
-                    singleCharacter: null
+                    ""singleCharacter"": null
                 }
             ";
             AssertQuerySuccess(query, expected);
@@ -150,7 +150,7 @@ namespace GraphQL.Tests.StarWars
             ";
             var expected = @"
                 {
-                    someNumber: 1
+                    ""someNumber"": 1
                 }
             ";
             AssertQuerySuccess(query, expected);
@@ -172,7 +172,7 @@ namespace GraphQL.Tests.StarWars
             ";
             var expected = @"
                 {
-                    someNumbers: [1,2]
+                    ""someNumbers"": [1,2]
                 }
             ";
             AssertQuerySuccess(query, expected);

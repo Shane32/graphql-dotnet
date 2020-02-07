@@ -1,26 +1,26 @@
 using System;
 using System.Linq;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
-namespace GraphQL
+namespace GraphQL.SystemTextJson
 {
-    public class ExecutionResultJsonConverter : JsonConverter
+    public class ExecutionResultJsonConverter : JsonConverter<ExecutionResult>
     {
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public override void Write(Utf8JsonWriter writer, ExecutionResult value, JsonSerializerOptions options)
         {
-            if (value is ExecutionResult result)
-            {
-                writer.WriteStartObject();
+            writer.WriteStartObject();
 
-                WriteData(result, writer, serializer);
-                WriteErrors(result.Errors, writer, serializer, result.ExposeExceptions);
-                WriteExtensions(result, writer, serializer);
+            // Important: Don't pass the same options down when recursively calling Serialize.
+            // See docs: https://docs.microsoft.com/en-us/dotnet/standard/serialization/system-text-json-migrate-from-newtonsoft-how-to
+            WriteData(writer, value);
+            WriteErrors(writer, value.Errors, value.ExposeExceptions);
+            WriteExtensions(writer, value);
 
-                writer.WriteEndObject();
-            }
+            writer.WriteEndObject();
         }
 
-        private void WriteData(ExecutionResult result, JsonWriter writer, JsonSerializer serializer)
+        private void WriteData(Utf8JsonWriter writer, ExecutionResult result)
         {
             var data = result.Data;
 
@@ -30,10 +30,10 @@ namespace GraphQL
             }
 
             writer.WritePropertyName("data");
-            serializer.Serialize(writer, data);
+            JsonSerializer.Serialize(writer, data);
         }
 
-        private void WriteErrors(ExecutionErrors errors, JsonWriter writer, JsonSerializer serializer, bool exposeExceptions)
+        private void WriteErrors(Utf8JsonWriter writer, ExecutionErrors errors, bool exposeExceptions)
         {
             if (errors == null || errors.Count == 0)
             {
@@ -50,8 +50,8 @@ namespace GraphQL
 
                 writer.WritePropertyName("message");
 
-                // check if return StackTrace, including all inner exceptions
-                serializer.Serialize(writer, exposeExceptions ? error.ToString() : error.Message);
+                // Check if return StackTrace, including all inner exceptions
+                JsonSerializer.Serialize(writer, exposeExceptions ? error.ToString() : error.Message);
 
                 if (error.Locations != null)
                 {
@@ -61,9 +61,9 @@ namespace GraphQL
                     {
                         writer.WriteStartObject();
                         writer.WritePropertyName("line");
-                        serializer.Serialize(writer, location.Line);
+                        JsonSerializer.Serialize(writer, location.Line);
                         writer.WritePropertyName("column");
-                        serializer.Serialize(writer, location.Column);
+                        JsonSerializer.Serialize(writer, location.Column);
                         writer.WriteEndObject();
                     });
                     writer.WriteEndArray();
@@ -72,10 +72,10 @@ namespace GraphQL
                 if (error.Path != null && error.Path.Any())
                 {
                     writer.WritePropertyName("path");
-                    serializer.Serialize(writer, error.Path);
+                    JsonSerializer.Serialize(writer, error.Path);
                 }
 
-                WriteErrorExtensions(error, writer, serializer);
+                WriteErrorExtensions(writer, error);
 
                 writer.WriteEndObject();
             });
@@ -83,7 +83,7 @@ namespace GraphQL
             writer.WriteEndArray();
         }
 
-        private void WriteErrorExtensions(ExecutionError error, JsonWriter writer, JsonSerializer serializer)
+        private void WriteErrorExtensions(Utf8JsonWriter writer, ExecutionError error)
         {
             if (string.IsNullOrWhiteSpace(error.Code) && (error.Data == null || error.Data.Count == 0))
             {
@@ -96,14 +96,14 @@ namespace GraphQL
             if (!string.IsNullOrWhiteSpace(error.Code))
             {
                 writer.WritePropertyName("code");
-                serializer.Serialize(writer, error.Code);
+                JsonSerializer.Serialize(writer, error.Code);
             }
 
             if (error.HasCodes)
             {
                 writer.WritePropertyName("codes");
                 writer.WriteStartArray();
-                error.Codes.Apply(code => serializer.Serialize(writer, code));
+                error.Codes.Apply(code => JsonSerializer.Serialize(writer, code));
                 writer.WriteEndArray();
             }
 
@@ -114,7 +114,7 @@ namespace GraphQL
                 error.DataAsDictionary.Apply(entry =>
                 {
                     writer.WritePropertyName(entry.Key);
-                    serializer.Serialize(writer, entry.Value);
+                    JsonSerializer.Serialize(writer, entry.Value);
                 });
                 writer.WriteEndObject();
             }
@@ -122,19 +122,16 @@ namespace GraphQL
             writer.WriteEndObject();
         }
 
-        private void WriteExtensions(ExecutionResult result, JsonWriter writer, JsonSerializer serializer)
+        private void WriteExtensions(Utf8JsonWriter writer, ExecutionResult result)
         {
             if (result.Extensions?.Count > 0)
             {
                 writer.WritePropertyName("extensions");
-                serializer.Serialize(writer, result.Extensions);
+                JsonSerializer.Serialize(writer, result.Extensions);
             }
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) => throw new NotImplementedException();
-
-        public override bool CanRead => false;
-
-        public override bool CanConvert(Type objectType) => objectType == typeof(ExecutionResult);
+        public override ExecutionResult Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+            => throw new NotImplementedException();
     }
 }
