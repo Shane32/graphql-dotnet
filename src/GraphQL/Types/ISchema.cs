@@ -27,6 +27,13 @@ namespace GraphQL.Types
         void Initialize();
 
         /// <summary>
+        /// Initializes the schema. Called by <see cref="IDocumentExecuter"/> before validating or executing the request.
+        /// <br/><br/>
+        /// Note that middleware cannot be applied once the schema has been initialized. See <see cref="ExecutionOptions.FieldMiddleware"/>.
+        /// </summary>
+        void Initialize(Instrumentation.IFieldMiddlewareBuilder fieldMiddlewareBuilder);
+
+        /// <summary>
         /// The <see cref="INameConverter"/> used by the schema. This is set by <see cref="IDocumentExecuter"/> to the converter passed to it within <see cref="ExecutionOptions.NameConverter"/>.
         /// </summary>
         INameConverter NameConverter { get; set; }

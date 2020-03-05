@@ -67,7 +67,30 @@ namespace GraphQL.Types
         {
             CheckDisposed();
 
-            FindType("____");
+            if (Initialized) return;
+
+            lock (_lookup)
+            {
+                if (Initialized) return;
+
+                FindType("____");
+            }
+        }
+
+        public void Initialize(Instrumentation.IFieldMiddlewareBuilder fieldMiddlewareBuilder)
+        {
+            CheckDisposed();
+
+            if (Initialized) return;
+
+            lock (_lookup)
+            {
+                if (Initialized) return;
+
+                fieldMiddlewareBuilder.ApplyTo(this);
+
+                FindType("___");
+            }
         }
 
         public IObjectGraphType Query { get; set; }

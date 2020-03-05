@@ -1888,6 +1888,7 @@ namespace GraphQL.Types
         GraphQL.Types.IGraphType FindType(string name);
         GraphQL.Types.IAstFromValueConverter FindValueConverter(object value, GraphQL.Types.IGraphType type);
         void Initialize();
+        void Initialize(GraphQL.Instrumentation.IFieldMiddlewareBuilder fieldMiddlewareBuilder);
         void RegisterDirective(GraphQL.Types.DirectiveGraphType directive);
         void RegisterDirectives(params GraphQL.Types.DirectiveGraphType[] directives);
         void RegisterType(GraphQL.Types.IGraphType type);
@@ -2050,6 +2051,7 @@ namespace GraphQL.Types
         public GraphQL.Types.IGraphType FindType(string name) { }
         public GraphQL.Types.IAstFromValueConverter FindValueConverter(object value, GraphQL.Types.IGraphType type) { }
         public void Initialize() { }
+        public void Initialize(GraphQL.Instrumentation.IFieldMiddlewareBuilder fieldMiddlewareBuilder) { }
         public void RegisterDirective(GraphQL.Types.DirectiveGraphType directive) { }
         public void RegisterDirectives(params GraphQL.Types.DirectiveGraphType[] directives) { }
         public void RegisterDirectives(System.Collections.Generic.IEnumerable<GraphQL.Types.DirectiveGraphType> directives) { }
