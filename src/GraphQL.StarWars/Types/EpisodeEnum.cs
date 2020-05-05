@@ -1,4 +1,4 @@
-﻿using GraphQL.Types;
+using GraphQL.Types;
 
 namespace GraphQL.StarWars.Types
 {
@@ -20,4 +20,6 @@ namespace GraphQL.StarWars.Types
         EMPIRE  = 5,
         JEDI  = 6
     }
+
+    public class AppearsInEnumGraphType : EnumerationGraphType<AppearsInEnum> { }
 }

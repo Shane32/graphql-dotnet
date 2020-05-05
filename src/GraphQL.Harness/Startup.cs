@@ -4,6 +4,7 @@ using GraphQL.StarWars;
 using GraphQL.StarWars.Types;
 using GraphQL.SystemTextJson;
 using GraphQL.Types;
+using GraphQL.Utilities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -40,6 +41,10 @@ namespace GraphQL.Harness
             services.AddSingleton<DroidType>();
             services.AddSingleton<CharacterInterface>();
             services.AddSingleton<EpisodeEnum>();
+            //services.AddSingleton<AppearsInEnumGraphType>();
+            services.AddSingleton<EnumerationGraphType<AppearsInEnum>>();
+
+            GraphTypeTypeRegistry.Register<AppearsInEnum, EnumerationGraphType<AppearsInEnum>>();
 
             // add schema
             services.AddSingleton<ISchema, StarWarsSchema>();

@@ -17,6 +17,7 @@ namespace GraphQL.StarWars
                 Name = "Luke",
                 Friends = new List<string> { "3", "4" },
                 AppearsIn = new[] { 4, 5, 6 },
+                AppearsInFlags = AppearsInEnum.Episode4 | AppearsInEnum.Episode5 | AppearsInEnum.Episode6,
                 HomePlanet = "Tatooine",
                 Cursor = "MQ=="
             });
@@ -25,6 +26,7 @@ namespace GraphQL.StarWars
                 Id = "2",
                 Name = "Vader",
                 AppearsIn = new[] { 4, 5, 6 },
+                AppearsInFlags = AppearsInEnum.Episode4 | AppearsInEnum.Episode5 | AppearsInEnum.Episode6,
                 HomePlanet = "Tatooine",
                 Cursor = "Mg=="
             });
@@ -35,6 +37,7 @@ namespace GraphQL.StarWars
                 Name = "R2-D2",
                 Friends = new List<string> { "1", "4" },
                 AppearsIn = new[] { 4, 5, 6 },
+                AppearsInFlags = AppearsInEnum.Episode4 | AppearsInEnum.Episode5 | AppearsInEnum.Episode6,
                 PrimaryFunction = "Astromech",
                 Cursor = "Mw=="
             });
@@ -43,6 +46,7 @@ namespace GraphQL.StarWars
                 Id = "4",
                 Name = "C-3PO",
                 AppearsIn = new[] { 4, 5, 6 },
+                AppearsInFlags = AppearsInEnum.Episode4 | AppearsInEnum.Episode5 | AppearsInEnum.Episode6,
                 PrimaryFunction = "Protocol",
                 Cursor = "NA=="
             });
