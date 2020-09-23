@@ -9,7 +9,6 @@ namespace GraphQL.Execution
     {
         // The following descriptions are copied from https://spec.graphql.org/June2018/#sec-Errors
 
-
         /// <summary>
         /// A description of the error intended for the developer as a guide to understand and correct the error
         /// </summary>
