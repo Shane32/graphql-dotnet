@@ -1,21 +1,15 @@
 name: Check if PR title contains WIP
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
 on:
   pull_request:
     types: 
       - opened
       - edited
        
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  check-title:
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Fail if name '${{ github.event.pull_request.title }}' contains 'WIP'
         if: ${{ contains(github.event.pull_request.title, 'wip') }}
