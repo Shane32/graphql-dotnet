@@ -17,8 +17,8 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Fail if name '${{ github.event.title }}' contains 'WIP'
-        if: ${{ !startsWith(github.event.title, 'refs/tags/') }}
+      - name: Fail if name '${{ github.event.pull_request.title }}' contains 'WIP'
+        if: ${{ contains(github.event.pull_request.title, 'wip') }}
         run: |
-          echo Error! PR title contains WIP: ${{ github.event.title }}
+          echo Error! PR title contains WIP: ${{ github.event.pull_request.title }}
           exit 1
